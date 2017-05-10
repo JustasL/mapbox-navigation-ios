@@ -169,11 +169,13 @@ class RouteMapViewController: UIViewController, PulleyPrimaryContentControllerDe
             controller.distanceLabel.isHidden = true
         } else if let upComingStep = routeProgress.currentLegProgress?.upComingStep {
             
-            if secondsRemaining > 5 {
-                controller.distanceLabel.text = distanceFormatter.string(from: distanceRemaining)
-            } else {
-                controller.distanceLabel.isHidden = true
-            }
+            controller.distanceLabel.text = distanceFormatter.string(from: distanceRemaining)
+
+//            if secondsRemaining > 5 {
+//                controller.distanceLabel.text = distanceFormatter.string(from: distanceRemaining)
+//            } else {
+//                controller.distanceLabel.isHidden = true
+//            }
             
             if let name = upComingStep.names?.first {
                 controller.streetLabel.text = name
@@ -384,6 +386,7 @@ extension RouteMapViewController: NavigationMapViewDelegate {
 // MARK: MGLMapViewDelegate
 
 extension RouteMapViewController: MGLMapViewDelegate {
+
     func mapView(_ mapView: MGLMapView, didChange mode: MGLUserTrackingMode, animated: Bool) {
         if resetTrackingModeTimer != nil {
             resetTrackingModeTimer.invalidate()

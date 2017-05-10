@@ -149,7 +149,7 @@ extension RouteController: CLLocationManagerDelegate {
         monitorStepProgress(location)
     }
     
-    func resetStartCounter() {
+    public func resetStartCounter() {
         lastTimeStampSpentMovingAwayFromStart = Date()
         lastUserDistanceToStartOfRoute = Double.infinity
     }

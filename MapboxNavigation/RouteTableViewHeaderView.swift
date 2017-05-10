@@ -3,12 +3,12 @@ import UIKit
 protocol RouteTableViewHeaderViewDelegate: class {
     func didTapCancel()
 }
-
+//This could be final
 @IBDesignable
 class RouteTableViewHeaderView: UIView {
-    
+    //Some of these could be private
     @IBOutlet weak var progressBarWidthConstraint: NSLayoutConstraint!
-    @IBOutlet weak var progressBar: ProgressBar!
+    @IBOutlet private var progressBar: ProgressBar! //Why did progressBar had outlet, even though was not used?
     @IBOutlet weak var distanceRemaining: SubtitleLabel!
     @IBOutlet weak var timeRemaining: TitleLabel!
     @IBOutlet weak var etaLabel: TitleLabel!
@@ -21,8 +21,14 @@ class RouteTableViewHeaderView: UIView {
         
         //clear default values from the storyboard so user does not see a 'flash' of random values
         distanceRemaining.text = ""
-        timeRemaining.text = ""
-        etaLabel.text = ""
+        timeRemaining    .text = ""
+        etaLabel         .text = ""
+        
+        //Don't care, just hide it (because sometimes progress bar 'unloads')
+        //TODO: Investigate why modified steps have odd behaviour
+        progressBar      .isHidden = true
+        distanceRemaining.isHidden = true
+        timeRemaining    .isHidden = true
     }
     
     override var intrinsicContentSize: CGSize {

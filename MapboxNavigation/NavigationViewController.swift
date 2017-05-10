@@ -124,7 +124,7 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
     /**
      `mapView` provides access to the navigation's `MGLMapView` with all its styling capabilities.
      
-     Note that you should not change the `mapView`'s delegate.
+     Note that you should not change the `mapView`'s delegate. <- VERY IMPORTANT
      */
     public var mapView: MGLMapView? {
         get {
@@ -176,21 +176,24 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
         let tableViewController = storyboard.instantiateViewController(withIdentifier: "RouteTableViewController") as! RouteTableViewController
         
         super.init(contentViewController: mapViewController, drawerViewController: tableViewController)
-        
+                
         self.directions = directions
         self.route = route
         self.setupRouteController()
         self.mapViewController = mapViewController
         self.tableViewController = tableViewController
-        
+                
         mapViewController.delegate = self
         mapViewController.routeController = routeController
         mapViewController.destination = destination
         
         tableViewController.routeController = routeController
         tableViewController.headerView.delegate = self
+    
     }
     
+    public var coords: [CLLocationCoordinate2D] = []
+
     deinit {
         suspendNotifications()
         mapViewController?.resetTrackingModeTimer?.invalidate()
@@ -224,6 +227,28 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
         self.delegate = self
     }
     
+    private var didDraw = false
+    private func drawRoute() {
+        guard !didDraw else { return }
+        didDraw = true
+
+        let routeFeature = MGLPolylineFeature(coordinates: &coords, count: UInt(coords.count))
+        let routeSource = MGLShapeSource(identifier: "route", shape: routeFeature, options: nil)
+        mapView?.style?.addSource(routeSource)
+        let routeLayer = MGLLineStyleLayer(identifier: "route", source: routeSource)
+        routeLayer.lineWidth = MGLStyleValue(rawValue: 6)
+        routeLayer.lineColor = MGLStyleValue(rawValue: UIColor(hex: 0xFF5900))
+        // Set properties like lineColor, lineWidth, lineCap, and lineJoin
+        
+        guard mapView?.style != nil else { return }
+        for layer in mapView!.style!.layers.reversed() {
+            if !(layer is MGLSymbolStyleLayer) {
+                mapView!.style!.insertLayer(routeLayer, below: layer)
+                break
+            }
+        }
+    }
+    
     public override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         suspendNotifications()
@@ -231,6 +256,8 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        drawRoute()
         
         UIApplication.shared.isIdleTimerDisabled = true
         routeController.resume()
@@ -277,6 +304,39 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
             navigationDelegate?.navigationViewController?(self, didArriveAt: destination)
         }
     }
+    ///My rerouting implementation.
+    ///Really custom, use only if you know what are you doing
+    ///DA actual route
+    public func newDestination(_ coordinates: [CLLocationCoordinate2D]) {
+        assert(coordinates.count >= 2)
+        
+        let options = routeController.routeProgress.route.routeOptions
+        options.waypoints = coordinates.map{Waypoint(coordinate: $0)}
+
+        routeTask?.cancel()
+        
+        routeTask = directions.calculate(options, completionHandler: { [weak self] (waypoints, routes, error) in
+            guard let strongSelf = self else {
+                return
+            }
+                        
+            if let route = routes?.first?.cleanedUpRoute(userPosition: coordinates.first!) {
+                
+                strongSelf.routeController.routeProgress = RouteProgress(route: route)
+                strongSelf.routeController.routeProgress.currentLegProgress.stepIndex = 0
+                
+                strongSelf.giveLocalNotification(strongSelf.routeController.routeProgress.currentLegProgress.currentStep)
+                
+                strongSelf.mapViewController?  .notifyDidReroute(route: route)
+                strongSelf.tableViewController?.notifyDidReroute()
+                
+                let annotation = MGLPointAnnotation()
+                annotation.coordinate = route.coordinates!.last!
+                strongSelf.destination = annotation //not sure if needed. Probably not
+                strongSelf.mapViewController!.mapView.addAnnotation(annotation)
+            }
+        })
+    }
     
     func shouldReroute(notification: NSNotification) {
         let location = notification.userInfo![RouteControllerNotificationShouldRerouteKey] as! CLLocation
@@ -290,8 +350,12 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
         routeTask?.cancel()
         
         let options = routeController.routeProgress.route.routeOptions
- 
-        options.waypoints = [Waypoint(coordinate: location.coordinate), Waypoint(coordinate: destination.coordinate)]
+    
+        assert(routeController.routeProgress.route.legs.first?.mainManeuverLocations != nil)
+        //Retoute from location.coordinate to mainManeuverLocations
+        var routeWaypoints = routeController.routeProgress.route.legs.first!.mainManeuverLocations.map{Waypoint(coordinate: $0)}
+        routeWaypoints.insert(Waypoint(coordinate: location.coordinate), at: 0)
+        options.waypoints = routeWaypoints
         
         if let firstWaypoint = options.waypoints.first, location.course >= 0 {
             firstWaypoint.heading = location.course
@@ -303,7 +367,7 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
                 return
             }
             
-            if let route = routes?.first {
+            if let route = routes?.first?.cleanedUpRoute(userPosition: location.coordinate) {
                 strongSelf.routeController.routeProgress = RouteProgress(route: route)
                 strongSelf.routeController.routeProgress.currentLegProgress.stepIndex = 0
                 
@@ -345,6 +409,17 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
         
         UIApplication.shared.scheduleLocalNotification(notification)
     }
+    
+//    private func _setupRouteController() {
+//        routeController = RouteController(route: route)
+//        routeController.simulatesLocationUpdates = simulatesLocationUpdates
+//        
+//        let annotation = MGLPointAnnotation()
+//        annotation.coordinate = route.coordinates!.last!
+//    
+//        mapViewController?.mapView.addAnnotation(annotation)
+//        destination = annotation
+//    }
     
     func setupRouteController() {
         if routeController == nil {
@@ -415,3 +490,79 @@ extension NavigationViewController: SimulatedRouteDelegate {
         routeController.locationManager(locationManager, didUpdateLocations: locations)
     }
 }
+
+public extension Route {
+    public func cleanedUpRoute(userPosition: CLLocationCoordinate2D) -> Route {
+        //If only one leg, don't do anyting, just return
+        guard self.legs.count >= 2 else {
+            if self.legs.first != nil {
+                if let maneuverLocation = self.legs.first!.steps.last?.maneuverLocation {
+                    self.legs.first!.mainManeuverLocations = [maneuverLocation]
+                }
+            }
+            return self
+        }
+        
+        self.routeOptions.waypoints = [self.routeOptions.waypoints.first!, self.routeOptions.waypoints.last!]
+        
+        var steps:    [MapboxDirections.RouteStep] = []
+        
+        var distance: CLLocationDistance = 0
+        var expectedTravelTime: TimeInterval = 0
+        
+        assert(self.legs.first != nil)
+        self.legs.first!.mainManeuverLocations = [userPosition]
+        
+        for (index, leg) in self.legs.enumerated() {
+            
+            distance           += leg.distance
+            expectedTravelTime += leg.expectedTravelTime
+            
+            if index == 0 {
+                //Since we are removing legs, we should add mainManeuverLocations
+                if let maneuverLocation = leg.steps.first?.maneuverLocation {
+                    self.legs.first!.mainManeuverLocations.append(maneuverLocation)
+                }
+                leg.steps
+                    .filter{($0.maneuverType ?? .turn) != .arrive}
+                    .forEach{steps.append($0)}
+            } else if index + 1 == self.legs.count {
+                if let maneuverLocation = leg.steps.last?.maneuverLocation {
+                    self.legs.first!.mainManeuverLocations.append(maneuverLocation)
+                }
+                leg.steps
+                    .filter{($0.maneuverType ?? .turn) != .depart }
+                    .forEach{steps.append($0)}
+            } else {
+                let _steps = leg.steps.filter{($0.maneuverType ?? .turn) != .arrive && ($0.maneuverType ?? .turn) != .depart }
+                if let maneuverLocation = _steps.first?.maneuverLocation {
+                    self.legs.first!.mainManeuverLocations.append(maneuverLocation)
+                }
+                _steps
+                    .forEach{steps.append($0)}
+            }
+        }
+        
+        self.legs.first!.destination =        self.legs.last!.destination
+        self.legs.first!.distance           = distance
+        self.legs.first!.expectedTravelTime = expectedTravelTime
+        self.legs.first!.steps =              steps
+        
+        self.legs = [self.legs.first!]
+        
+        return self
+    }
+}
+
+extension UIColor {
+    
+    fileprivate convenience init(hex: Int) {
+        let components = (
+            R: CGFloat((hex >> 16) & 0xff) / 255,
+            G: CGFloat((hex >> 08) & 0xff) / 255,
+            B: CGFloat((hex >> 00) & 0xff) / 255
+        )
+        self.init(red: components.R, green: components.G, blue: components.B, alpha: 1)
+    }
+}
+

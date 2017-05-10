@@ -127,6 +127,11 @@ open class RouteLegProgress: NSObject {
         didSet {
             assert(stepIndex >= 0 && stepIndex < leg.steps.endIndex)
             currentStepProgress = RouteStepProgress(step: currentStep)
+            //Work around legs, used for rerouting, so that app would reroute to current leg end, rather than destination.
+            //By leg I mean, what used to be leg, now its leg.mainManeuverLocations
+            if let mainManeuverLocation = leg.mainManeuverLocations.first, mainManeuverLocation == currentStep.maneuverLocation {
+                leg.mainManeuverLocations.removeFirst()
+            }
         }
     }
 
@@ -298,4 +303,9 @@ open class RouteStepProgress: NSObject {
     public init(step: RouteStep) {
         self.step = step
     }
+}
+
+//extension CLLocationCoordinate2D: Equatable {}
+fileprivate func ==(lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
+    return (lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude)
 }
