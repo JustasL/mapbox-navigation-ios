@@ -14,7 +14,9 @@ class ViewController: UIViewController, MGLMapViewDelegate, NavigationViewContro
     var userRoute: Route?
     
     @IBOutlet weak var mapView: NavigationMapView!
-    @IBOutlet weak var startNavigationButton: UIButton!
+    @IBOutlet weak var startNavigationButton: UIButton! {
+        didSet { startNavigationButton.isHidden = false }
+    }
     @IBOutlet weak var simulateNavigationButton: UIButton!
     @IBOutlet weak var howToBeginLabel: UILabel!
     
@@ -53,11 +55,14 @@ class ViewController: UIViewController, MGLMapViewDelegate, NavigationViewContro
     }
     
     @IBAction func didTapStartNavigation(_ sender: Any) {
-        startNavigation(along: userRoute!)
+
     }
     
     @IBAction func didTapSimulateNavigation(_ sender: Any) {
-        startNavigation(along: userRoute!, simulatesLocationUpdates: true)
+        //Debugging/faking, I dont care about MapBox map feautres
+//        getRoute()
+        getInitialRoute()
+//        startNavigation(along: userRoute!, simulatesLocationUpdates: true)
     }
     
     func resumeNotifications() {
@@ -103,63 +108,58 @@ class ViewController: UIViewController, MGLMapViewDelegate, NavigationViewContro
          */
     }
     
-    func getRoute(didFinish: (()->())? = nil) {
-        guard let destination = destination else { return }
+    func getRoute(didFinish: ((Route)->())? = nil) {
+    
+        myNavigationViewController.newDestination(coord)
+    }
+    
+    func getInitialRoute() {
+        let cooard = [mapView.userLocation!.coordinate,
         
-        let options = RouteOptions(coordinates: [mapView.userLocation!.coordinate, destination.coordinate])
+        let options = RouteOptions(coordinates: cooard)
         options.includesSteps = true
-        options.routeShapeResolution = .full
-        options.profileIdentifier = .automobileAvoidingTraffic
-        
+        options.routeShapeResolution = .low
+        options.profileIdentifier = .automobile
         _ = Directions.shared.calculate(options) { [weak self] (waypoints, routes, error) in
             guard error == nil else {
                 print(error!)
                 return
             }
-            guard let route = routes?.first else {
-                return
-            }
+            guard
+                let startPoint = self?.mapView.userLocation!.coordinate,
+                let route = routes?.first?.cleanedUpRoute(userPosition: startPoint) else { return }
             
-            self?.userRoute = route
-            self?.startNavigationButton.isHidden = false
-            self?.simulateNavigationButton.isHidden = false
-            self?.howToBeginLabel.isHidden = true
-            
-            // Open method for adding and updating the route line
-            self?.mapView.showRoute(route)
-            
-            didFinish?()
-        }
+            self?.startNavigation(along: route)
+        }        
     }
-    
-    func startNavigation(along route: Route, simulatesLocationUpdates: Bool = false) {
-        // Pass through a
-        // 1. the route the user will take
-        // 2. A `Directions` class, used for rerouting.
-        let navigationViewController = NavigationViewController(for: route)
+
+    var myNavigationViewController: NavigationViewController!
+
+    func startNavigation(along route: Route, simulatesLocationUpdates: Bool = true) {
+        myNavigationViewController = NavigationViewController(for: route)
+//        showsTraffic
+        myNavigationViewController.mapView?.showsTraffic = false
         
-        // If you'd like to use AWS Polly, provide your IdentityPoolId below
-        // `identityPoolId` is a required value for using AWS Polly voice instead of iOS's built in AVSpeechSynthesizer
-        // You can get a token here: http://docs.aws.amazon.com/mobile/sdkforios/developerguide/cognito-auth-aws-identity-for-ios.html
-        // viewController.voiceController?.identityPoolId = "<#Your AWS IdentityPoolId. Remove Argument if you do not want to use AWS Polly#>"
+        myNavigationViewController.simulatesLocationUpdates = true
+        myNavigationViewController.routeController.snapsUserLocationAnnotationToRoute = true
+        myNavigationViewController.voiceController?.volume = 0.5
+        myNavigationViewController.voiceController?.isEnabled = false
+        myNavigationViewController.navigationDelegate = self
         
-        navigationViewController.simulatesLocationUpdates = simulatesLocationUpdates
-        navigationViewController.routeController.snapsUserLocationAnnotationToRoute = true
-        navigationViewController.voiceController?.volume = 0.5
-        navigationViewController.navigationDelegate = self
+        myNavigationViewController.coords = 
         
         // Uncomment to apply custom styles
 //        styleForRegular().apply()
 //        styleForCompact().apply()
-//        styleForiPad().apply()
+//        styleForiPad()   .apply()
 //        styleForCarPlay().apply()
         
         let camera = mapView.camera
         camera.pitch = 45
         camera.altitude = 1_000
-        navigationViewController.pendingCamera = camera
+        myNavigationViewController.pendingCamera = camera
         
-        present(navigationViewController, animated: true, completion: nil)
+        present(myNavigationViewController, animated: true, completion: nil)
     }
     
     func styleForRegular() -> Style {
@@ -252,7 +252,19 @@ class ViewController: UIViewController, MGLMapViewDelegate, NavigationViewContro
         return line
     }
     
+    var didArrive = false
     func navigationViewController(_ navigationViewController: NavigationViewController, didArriveAt destination: MGLAnnotation) {
         print("User arrived at \(destination)")
+        
+        guard !didArrive else { return }
+        didArrive = true
+        getRoute()
+    }
+}
+
+
+func delay(_ time: Double, closure: @escaping ()->()) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + time) {
+        closure()
     }
 }
