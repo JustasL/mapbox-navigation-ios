@@ -411,6 +411,7 @@ extension RouteMapViewController: MGLMapViewDelegate {
     func mapView(_ mapView: MGLMapView, didFinishLoading style: MGLStyle) {
         let map = mapView as! NavigationMapView
         map.showRoute(route)
+        delegate?.navigationMapView(mapView, didFinishLoading: style)
     }
     
     func mapView(_ mapView: MGLMapView, didSelect annotation: MGLAnnotation) {
@@ -503,4 +504,5 @@ protocol RouteMapViewControllerDelegate: class {
     func navigationMapView(_ mapView: NavigationMapView, routeCasingStyleLayerWithIdentifier identifier: String, source: MGLSource) -> MGLStyleLayer?
     func navigationMapView(_ mapView: NavigationMapView, shapeDescribing route: Route) -> MGLShape?
     func navigationMapView(_ mapView: NavigationMapView, simplifiedShapeDescribing route: Route) -> MGLShape?
+    func navigationMapView(_ mapView: MGLMapView, didFinishLoading style: MGLStyle)
 }

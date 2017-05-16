@@ -114,7 +114,7 @@ class ViewController: UIViewController, MGLMapViewDelegate, NavigationViewContro
     }
     
     func getInitialRoute() {
-        let cooard = [mapView.userLocation!.coordinate,
+        let cooard = [mapView.userLocation!.coordinate]
         
         let options = RouteOptions(coordinates: cooard)
         options.includesSteps = true
@@ -146,7 +146,7 @@ class ViewController: UIViewController, MGLMapViewDelegate, NavigationViewContro
         myNavigationViewController.voiceController?.isEnabled = false
         myNavigationViewController.navigationDelegate = self
         
-        myNavigationViewController.coords = 
+        myNavigationViewController.coords = []
         
         // Uncomment to apply custom styles
 //        styleForRegular().apply()

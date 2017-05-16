@@ -67,6 +67,8 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
         }
     }
     
+    public var showsTraffic: Bool?
+    
     /** 
      `destination` is an instance of `MGLAnnotation` that will be showned on
      on the destination of your route. The last coordinate of the route will be
@@ -453,6 +455,11 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
     
     func navigationMapView(_ mapView: NavigationMapView, simplifiedShapeDescribing route: Route) -> MGLShape? {
         return navigationDelegate?.navigationMapView?(mapView, shapeDescribing: route)
+    }
+    
+    func navigationMapView(_ mapView: MGLMapView, didFinishLoading style: MGLStyle) {
+        guard let showsTraffic = showsTraffic else { return }
+        mapView.showsTraffic = showsTraffic
     }
 }
 
