@@ -16,8 +16,8 @@ open class StyleKitArrows : NSObject {
         let context = UIGraphicsGetCurrentContext()
 
         //// Color Declarations
-        let strokeColor2 = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
-        let fillColor = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+        let strokeColor2 = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
+        let fillColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
 
         //// Group 2
         context?.saveGState()
@@ -73,7 +73,7 @@ open class StyleKitArrows : NSObject {
         let context = UIGraphicsGetCurrentContext()
 
         //// Color Declarations
-        let fillColor = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+        let fillColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
 
         //// Bezier Drawing
         context?.saveGState()
@@ -113,7 +113,7 @@ open class StyleKitArrows : NSObject {
         let context = UIGraphicsGetCurrentContext()
 
         //// Color Declarations
-        let fillColor = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+        let fillColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
 
         //// Bezier Drawing
         context?.saveGState()
@@ -156,7 +156,7 @@ open class StyleKitArrows : NSObject {
         let context = UIGraphicsGetCurrentContext()
 
         //// Color Declarations
-        let fillColor = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+        let fillColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
 
         //// Bezier Drawing
         context?.saveGState()
@@ -194,8 +194,8 @@ open class StyleKitArrows : NSObject {
         let context = UIGraphicsGetCurrentContext()
 
         //// Color Declarations
-        let strokeColor2 = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
-        let fillColor = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+        let strokeColor2 = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
+        let fillColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
 
         //// Group 2
         context?.saveGState()
@@ -257,8 +257,8 @@ open class StyleKitArrows : NSObject {
 
         //// Color Declarations
         let strokeColor = UIColor(red: 0.620, green: 0.620, blue: 0.620, alpha: 1.000)
-        let strokeColor2 = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
-        let fillColor = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+        let strokeColor2 = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
+        let fillColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
 
         //// Group 3
         context?.saveGState()
@@ -333,8 +333,8 @@ open class StyleKitArrows : NSObject {
         let context = UIGraphicsGetCurrentContext()
 
         //// Color Declarations
-        let strokeColor2 = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
-        let fillColor = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+        let strokeColor2 = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
+        let fillColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
 
         //// Group 2
         context?.saveGState()
@@ -400,7 +400,7 @@ open class StyleKitArrows : NSObject {
         let context = UIGraphicsGetCurrentContext()
 
         //// Color Declarations
-        let arrowColor = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+        let arrowColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
 
         //// Bezier 2 Drawing
         context?.saveGState()
@@ -427,7 +427,7 @@ open class StyleKitArrows : NSObject {
         let context = UIGraphicsGetCurrentContext()
 
         //// Color Declarations
-        let fillColor = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+        let fillColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
 
         //// Bezier Drawing
         context?.saveGState()
@@ -463,8 +463,8 @@ open class StyleKitArrows : NSObject {
 
         //// Color Declarations
         let strokeColor = UIColor(red: 0.620, green: 0.620, blue: 0.620, alpha: 1.000)
-        let strokeColor2 = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
-        let fillColor = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+        let strokeColor2 = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
+        let fillColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
 
         //// Group 3
         context?.saveGState()
@@ -541,8 +541,8 @@ open class StyleKitArrows : NSObject {
 
         //// Color Declarations
         let strokeColor = UIColor(red: 0.620, green: 0.620, blue: 0.620, alpha: 1.000)
-        let strokeColor2 = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
-        let fillColor = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+        let strokeColor2 = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
+        let fillColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
 
         //// Group 3
         context?.saveGState()
@@ -666,8 +666,8 @@ open class StyleKitArrows : NSObject {
 
         //// Color Declarations
         let strokeColor = UIColor(red: 0.620, green: 0.620, blue: 0.620, alpha: 1.000)
-        let strokeColor2 = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
-        let fillColor = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+        let strokeColor2 = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
+        let fillColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
 
         //// Group 3
         context?.saveGState()
@@ -748,8 +748,8 @@ open class StyleKitArrows : NSObject {
 
         //// Color Declarations
         let strokeColor = UIColor(red: 0.620, green: 0.620, blue: 0.620, alpha: 1.000)
-        let strokeColor2 = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
-        let fillColor = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+        let strokeColor2 = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
+        let fillColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
 
         //// Group 3
         context?.saveGState()
@@ -827,8 +827,8 @@ open class StyleKitArrows : NSObject {
 
         //// Color Declarations
         let strokeColor = UIColor(red: 0.620, green: 0.620, blue: 0.620, alpha: 1.000)
-        let strokeColor2 = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
-        let fillColor = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+        let strokeColor2 = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
+        let fillColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
 
         //// Group 2
         context?.saveGState()
@@ -914,8 +914,8 @@ open class StyleKitArrows : NSObject {
 
         //// Color Declarations
         let strokeColor = UIColor(red: 0.620, green: 0.620, blue: 0.620, alpha: 1.000)
-        let strokeColor2 = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
-        let fillColor = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+        let strokeColor2 = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
+        let fillColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
 
         //// Group 3
         context?.saveGState()
@@ -1008,8 +1008,8 @@ open class StyleKitArrows : NSObject {
 
         //// Color Declarations
         let strokeColor = UIColor(red: 0.620, green: 0.620, blue: 0.620, alpha: 1.000)
-        let strokeColor2 = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
-        let fillColor = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+        let strokeColor2 = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
+        let fillColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
 
         //// Group 3
         context?.saveGState()
@@ -1108,8 +1108,8 @@ open class StyleKitArrows : NSObject {
 
         //// Color Declarations
         let strokeColor = UIColor(red: 0.620, green: 0.620, blue: 0.620, alpha: 1.000)
-        let strokeColor2 = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
-        let fillColor = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+        let strokeColor2 = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
+        let fillColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
 
         //// Group 3
         context?.saveGState()
@@ -1226,8 +1226,8 @@ open class StyleKitArrows : NSObject {
 
         //// Color Declarations
         let strokeColor = UIColor(red: 0.620, green: 0.620, blue: 0.620, alpha: 1.000)
-        let strokeColor2 = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
-        let fillColor = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+        let strokeColor2 = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
+        let fillColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
 
         //// Group 3
         context?.saveGState()
@@ -1347,8 +1347,8 @@ open class StyleKitArrows : NSObject {
 
     open class func drawLane_straight() {
         //// Color Declarations
-        let fillColor4 = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
-        let fillColor5 = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+        let fillColor4 = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
+        let fillColor5 = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
 
         //// Rectangle Drawing
         let rectanglePath = UIBezierPath(rect: CGRect(x: 13, y: 11, width: 4, height: 16))
@@ -1393,8 +1393,8 @@ open class StyleKitArrows : NSObject {
 
     open class func drawLane_right_h() {
         //// Color Declarations
-        let fillColor6 = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
-        let strokeColor3 = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+        let fillColor6 = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
+        let strokeColor3 = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
 
         //// Bezier Drawing
         let bezierPath = UIBezierPath()
@@ -1435,9 +1435,9 @@ open class StyleKitArrows : NSObject {
 
     open class func drawLane_straight_right() {
         //// Color Declarations
-        let fillColor7 = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
-        let fillColor8 = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
-        let strokeColor4 = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+        let fillColor7 = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
+        let fillColor8 = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
+        let strokeColor4 = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
 
         //// Rectangle Drawing
         let rectanglePath = UIBezierPath(rect: CGRect(x: 9.05, y: 11.6, width: 4, height: 15))
@@ -1521,8 +1521,8 @@ open class StyleKitArrows : NSObject {
     open class func drawLane_right_only() {
         //// Color Declarations
         let strokeColor = UIColor(red: 0.620, green: 0.620, blue: 0.620, alpha: 1.000)
-        let fillColor8 = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
-        let strokeColor4 = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+        let fillColor8 = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
+        let strokeColor4 = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
 
         //// Rectangle Drawing
         let rectanglePath = UIBezierPath(rect: CGRect(x: 9.05, y: 11.6, width: 4, height: 15))
@@ -1606,7 +1606,7 @@ open class StyleKitArrows : NSObject {
     open class func drawLane_straight_only() {
         //// Color Declarations
         let strokeColor = UIColor(red: 0.620, green: 0.620, blue: 0.620, alpha: 1.000)
-        let fillColor7 = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+        let fillColor7 = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
 
         //// Bezier 2 Drawing
         let bezier2Path = UIBezierPath()
@@ -1689,7 +1689,7 @@ open class StyleKitArrows : NSObject {
 
     open class func drawLane_uturn() {
         //// Color Declarations
-        let arrowColor = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+        let arrowColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1.000)
 
         //// Bezier Drawing
         let bezierPath = UIBezierPath()
