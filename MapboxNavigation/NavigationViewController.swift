@@ -11,7 +11,7 @@ public class NavigationPulleyViewController: PulleyViewController {}
  The `NavigationViewControllerDelegate` provides methods for configuring the map view shown by a `NavigationViewController` and responding to the cancellation of a navigation session.
  */
 @objc(MBNavigationViewControllerDelegate)
-public protocol NavigationViewControllerDelegate {
+public protocol NavigationViewControllerDelegate: class {
     /**
      Called when the user exits a route and dismisses the navigation view controller by tapping the Cancel button.
      */
@@ -98,7 +98,7 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
     /**
      The receiver’s delegate.
      */
-    public var navigationDelegate: NavigationViewControllerDelegate?
+    public weak var navigationDelegate: NavigationViewControllerDelegate?
     
     /**
      `voiceController` provides access to various speech synthesizer options.
@@ -231,7 +231,7 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
     
     private var didDraw = false
     private func drawRoute() {
-        guard !didDraw else { return }
+        guard !didDraw && coords.count >= 2 else { return }
         didDraw = true
 
         let routeFeature = MGLPolylineFeature(coordinates: &coords, count: UInt(coords.count))
@@ -258,8 +258,6 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        drawRoute()
         
         UIApplication.shared.isIdleTimerDisabled = true
         routeController.resume()
@@ -460,6 +458,7 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
     func navigationMapView(_ mapView: MGLMapView, didFinishLoading style: MGLStyle) {
         guard let showsTraffic = showsTraffic else { return }
         mapView.showsTraffic = showsTraffic
+        drawRoute()
     }
 }
 
