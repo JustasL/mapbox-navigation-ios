@@ -18,6 +18,12 @@ public protocol NavigationViewControllerDelegate: class {
     @objc optional func navigationViewControllerDidCancelNavigation(_ : NavigationViewController)
     
     /**
+     Called when the user moves.
+     */
+    @objc optional func navigationViewController(_ navigationViewController : NavigationViewController, didArriveAtLocation location: CLLocation)
+
+    
+    /**
      Called when the user arrives at the destination.
      */
     @objc optional func navigationViewController(_ navigationViewController : NavigationViewController, didArriveAt destination: MGLAnnotation)
@@ -299,6 +305,8 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
 
         mapViewController?.notifyDidChange(routeProgress: routeProgress, location: location, secondsRemaining: secondsRemaining)
         tableViewController?.notifyDidChange(routeProgress: routeProgress)
+        
+        navigationDelegate?.navigationViewController?(self, didArriveAtLocation: location)
         
         if routeProgress.currentLegProgress.alertUserLevel == .arrive {
             navigationDelegate?.navigationViewController?(self, didArriveAt: destination)
