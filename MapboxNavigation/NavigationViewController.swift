@@ -21,7 +21,7 @@ public protocol NavigationViewControllerDelegate: class {
      Called when the user moves.
      */
     @objc optional func navigationViewController(_ navigationViewController : NavigationViewController, didArriveAtLocation location: CLLocation)
-
+    
     
     /**
      Called when the user arrives at the destination.
@@ -75,11 +75,11 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
     
     public var showsTraffic: Bool?
     
-    /** 
+    /**
      `destination` is an instance of `MGLAnnotation` that will be showned on
      on the destination of your route. The last coordinate of the route will be
      used if no destination is given.
-    */
+     */
     public var destination: MGLAnnotation!
     
     /**
@@ -115,7 +115,7 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
     
     /**
      `routeController` provides all routing logic for the user.
-
+     
      See `RouteController` for more information
      */
     public var routeController: RouteController!
@@ -163,15 +163,15 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
     
     required public init(contentViewController: UIViewController, drawerViewController: UIViewController) {
         fatalError("init(contentViewController:drawerViewController:) has not been implemented. " +
-                   "Use init(for:directions:) if you are instantiating programmatically " +
-                   "or a storyboard reference to Navigation if you are using storyboards.")
+            "Use init(for:directions:) if you are instantiating programmatically " +
+            "or a storyboard reference to Navigation if you are using storyboards.")
     }
     
     /**
      Initializes a `NavigationViewController` that provides turn by turn navigation
      for the given route. A optional `direction` object is needed for  potential
      rerouting.
-
+     
      See [MapboxDirections.swift](https://github.com/mapbox/MapboxDirections.swift)
      for further information.
      */
@@ -184,24 +184,24 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
         let tableViewController = storyboard.instantiateViewController(withIdentifier: "RouteTableViewController") as! RouteTableViewController
         
         super.init(contentViewController: mapViewController, drawerViewController: tableViewController)
-                
+        
         self.directions = directions
         self.route = route
         self.setupRouteController()
         self.mapViewController = mapViewController
         self.tableViewController = tableViewController
-                
+        
         mapViewController.delegate = self
         mapViewController.routeController = routeController
         mapViewController.destination = destination
         
         tableViewController.routeController = routeController
         tableViewController.headerView.delegate = self
-    
+        
     }
     
     public var coords: [CLLocationCoordinate2D] = []
-
+    
     deinit {
         suspendNotifications()
         mapViewController?.resetTrackingModeTimer?.invalidate()
@@ -239,7 +239,7 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
     private func drawRoute() {
         guard !didDraw && coords.count >= 2 else { return }
         didDraw = true
-
+        
         let routeFeature = MGLPolylineFeature(coordinates: &coords, count: UInt(coords.count))
         let routeSource = MGLShapeSource(identifier: "route", shape: routeFeature, options: nil)
         mapView?.style?.addSource(routeSource)
@@ -302,7 +302,7 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
         let routeProgress = notification.userInfo![RouteControllerAlertLevelDidChangeNotificationRouteProgressKey] as! RouteProgress
         let location = notification.userInfo![RouteControllerProgressDidChangeNotificationLocationKey] as! CLLocation
         let secondsRemaining = notification.userInfo![RouteControllerProgressDidChangeNotificationSecondsRemainingOnStepKey] as! TimeInterval
-
+        
         mapViewController?.notifyDidChange(routeProgress: routeProgress, location: location, secondsRemaining: secondsRemaining)
         tableViewController?.notifyDidChange(routeProgress: routeProgress)
         
@@ -320,14 +320,14 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
         
         let options = routeController.routeProgress.route.routeOptions
         options.waypoints = coordinates.map{Waypoint(coordinate: $0)}
-
+        
         routeTask?.cancel()
         
         routeTask = directions.calculate(options, completionHandler: { [weak self] (waypoints, routes, error) in
             guard let strongSelf = self else {
                 return
             }
-                        
+            
             if let route = routes?.first?.cleanedUpRoute(userPosition: coordinates.first!) {
                 
                 strongSelf.routeController.routeProgress = RouteProgress(route: route)
@@ -358,7 +358,7 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
         routeTask?.cancel()
         
         let options = routeController.routeProgress.route.routeOptions
-    
+        
         assert(routeController.routeProgress.route.legs.first?.mainManeuverLocations != nil)
         //Retoute from location.coordinate to mainManeuverLocations
         var routeWaypoints = routeController.routeProgress.route.legs.first!.mainManeuverLocations.map{Waypoint(coordinate: $0)}
@@ -418,16 +418,16 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
         UIApplication.shared.scheduleLocalNotification(notification)
     }
     
-//    private func _setupRouteController() {
-//        routeController = RouteController(route: route)
-//        routeController.simulatesLocationUpdates = simulatesLocationUpdates
-//        
-//        let annotation = MGLPointAnnotation()
-//        annotation.coordinate = route.coordinates!.last!
-//    
-//        mapViewController?.mapView.addAnnotation(annotation)
-//        destination = annotation
-//    }
+    //    private func _setupRouteController() {
+    //        routeController = RouteController(route: route)
+    //        routeController.simulatesLocationUpdates = simulatesLocationUpdates
+    //
+    //        let annotation = MGLPointAnnotation()
+    //        annotation.coordinate = route.coordinates!.last!
+    //
+    //        mapViewController?.mapView.addAnnotation(annotation)
+    //        destination = annotation
+    //    }
     
     func setupRouteController() {
         if routeController == nil {
@@ -480,23 +480,23 @@ extension NavigationViewController: RouteTableViewHeaderViewDelegate {
     }
 }
 
-extension NavigationViewController: PulleyDelegate {
-    public func drawerPositionDidChange(drawer: PulleyViewController) {
-        switch drawer.drawerPosition {
-        case .open:
-            tableViewController?.tableView.isScrollEnabled = true
-            break
-        case .partiallyRevealed:
-            tableViewController?.tableView.isScrollEnabled = true
-            break
-        case .collapsed:
-            tableViewController?.tableView.isScrollEnabled = false
-            break
-        case .closed:
-            break
-        }
-    }
-}
+//extension NavigationViewController: PulleyDelegate {
+//    public func drawerPositionDidChange(drawer: PulleyViewController) {
+//        switch drawer.drawerPosition {
+//        case .open:
+//            tableViewController?.tableView.isScrollEnabled = true
+//            break
+//        case .partiallyRevealed:
+//            tableViewController?.tableView.isScrollEnabled = true
+//            break
+//        case .collapsed:
+//            tableViewController?.tableView.isScrollEnabled = false
+//            break
+//        case .closed:
+//            break
+//        }
+//    }
+//}
 
 extension NavigationViewController: SimulatedRouteDelegate {
     func simulation(_ locationManager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
