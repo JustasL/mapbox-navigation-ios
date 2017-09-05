@@ -484,23 +484,23 @@ extension NavigationViewController: RouteTableViewHeaderViewDelegate {
     }
 }
 
-extension NavigationViewController: PulleyDelegate {
-    public func drawerPositionDidChange(drawer: PulleyViewController) {
-        switch drawer.drawerPosition {
-        case .open:
-            tableViewController?.tableView.isScrollEnabled = true
-            break
-        case .partiallyRevealed:
-            tableViewController?.tableView.isScrollEnabled = true
-            break
-        case .collapsed:
-            tableViewController?.tableView.isScrollEnabled = false
-            break
-        case .closed:
-            break
-        }
-    }
-}
+//extension NavigationViewController: PulleyDelegate {
+//    public func drawerPositionDidChange(drawer: PulleyViewController) {
+//        switch drawer.drawerPosition {
+//        case .open:
+//            tableViewController?.tableView.isScrollEnabled = true
+//            break
+//        case .partiallyRevealed:
+//            tableViewController?.tableView.isScrollEnabled = true
+//            break
+//        case .collapsed:
+//            tableViewController?.tableView.isScrollEnabled = false
+//            break
+//        case .closed:
+//            break
+//        }
+//    }
+//}
 
 extension NavigationViewController: SimulatedRouteDelegate {
     func simulation(_ locationManager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
