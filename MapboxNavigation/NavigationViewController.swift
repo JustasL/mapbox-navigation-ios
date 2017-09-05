@@ -197,6 +197,7 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
         tableViewController.routeController = routeController
         tableViewController.headerView.delegate = self
         
+        tableViewController.tableView.isScrollEnabled = false
     }
     
     public var coords: [CLLocationCoordinate2D] = []
