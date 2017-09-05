@@ -20,8 +20,7 @@ public protocol NavigationViewControllerDelegate: class {
     /**
      Called when the user moves.
      */
-    @objc optional func navigationViewController(_ navigationViewController : NavigationViewController, didArriveAtLocation location: CLLocation)
-    
+    @objc optional func navigationViewController(_ navigationViewController : NavigationViewController, didArriveAtLocation location: CLLocation, destinationName: String?)
     
     /**
      Called when the user arrives at the destination.
@@ -306,7 +305,7 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
         mapViewController?.notifyDidChange(routeProgress: routeProgress, location: location, secondsRemaining: secondsRemaining)
         tableViewController?.notifyDidChange(routeProgress: routeProgress)
         
-        navigationDelegate?.navigationViewController?(self, didArriveAtLocation: location)
+        navigationDelegate?.navigationViewController?(self, didArriveAtLocation: location, destinationName: destinationName)
         
         if routeProgress.currentLegProgress.alertUserLevel == .arrive {
             navigationDelegate?.navigationViewController?(self, didArriveAt: destination)
@@ -315,6 +314,9 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
     ///My rerouting implementation.
     ///Really custom, use only if you know what are you doing
     ///DA actual route
+    
+    private var destinationName: String?
+    
     public func newDestination(_ coordinates: [CLLocationCoordinate2D]) {
         assert(coordinates.count >= 2)
         
@@ -329,6 +331,8 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
             }
             
             if let route = routes?.first?.cleanedUpRoute(userPosition: coordinates.first!) {
+                
+                self?.destinationName = route.legs.first?.destination.name
                 
                 strongSelf.routeController.routeProgress = RouteProgress(route: route)
                 strongSelf.routeController.routeProgress.currentLegProgress.stepIndex = 0
@@ -480,23 +484,23 @@ extension NavigationViewController: RouteTableViewHeaderViewDelegate {
     }
 }
 
-//extension NavigationViewController: PulleyDelegate {
-//    public func drawerPositionDidChange(drawer: PulleyViewController) {
-//        switch drawer.drawerPosition {
-//        case .open:
-//            tableViewController?.tableView.isScrollEnabled = true
-//            break
-//        case .partiallyRevealed:
-//            tableViewController?.tableView.isScrollEnabled = true
-//            break
-//        case .collapsed:
-//            tableViewController?.tableView.isScrollEnabled = false
-//            break
-//        case .closed:
-//            break
-//        }
-//    }
-//}
+extension NavigationViewController: PulleyDelegate {
+    public func drawerPositionDidChange(drawer: PulleyViewController) {
+        switch drawer.drawerPosition {
+        case .open:
+            tableViewController?.tableView.isScrollEnabled = true
+            break
+        case .partiallyRevealed:
+            tableViewController?.tableView.isScrollEnabled = true
+            break
+        case .collapsed:
+            tableViewController?.tableView.isScrollEnabled = false
+            break
+        case .closed:
+            break
+        }
+    }
+}
 
 extension NavigationViewController: SimulatedRouteDelegate {
     func simulation(_ locationManager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
