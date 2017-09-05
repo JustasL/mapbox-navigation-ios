@@ -245,7 +245,8 @@ public class NavigationViewController: NavigationPulleyViewController, RouteMapV
         mapView?.style?.addSource(routeSource)
         let routeLayer = MGLLineStyleLayer(identifier: "route", source: routeSource)
         routeLayer.lineWidth = MGLStyleValue(rawValue: 6)
-        routeLayer.lineColor = MGLStyleValue(rawValue: UIColor(red: 255/255, green: 201/255, blue: 33/255, alpha: 1))//UIColor(hex: 0xFF5900))
+        routeLayer.lineColor = MGLStyleValue(rawValue: UIColor(red: 255/255, green: 89/255, blue: 0/255, alpha: 1))//UIColor(hex: 0xFF5900))
+        
         // Set properties like lineColor, lineWidth, lineCap, and lineJoin
         
         guard mapView?.style != nil else { return }
