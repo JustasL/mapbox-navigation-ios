@@ -251,7 +251,7 @@ extension RouteController: CLLocationManagerDelegate {
             }
             
             if routeProgress.currentLegProgress.upComingStep?.maneuverType == ManeuverType.arrive {
-                alertLevel = .arrive
+                alertLevel = .high
             } else if courseMatchesManeuverFinalHeading {
                 routeProgress.currentLegProgress.stepIndex += 1
                 let userSnapToStepDistanceFromManeuver = distance(along: routeProgress.currentLegProgress.currentStep.coordinates!, from: location.coordinate)
